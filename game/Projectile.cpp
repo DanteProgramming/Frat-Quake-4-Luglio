@@ -633,7 +633,20 @@ bool idProjectile::Collide( const trace_t &collision, const idVec3 &velocity, bo
  	const char*	damageDefName;
  	idVec3		dir;
  	bool		canDamage;
- 	
+	int bounce;
+
+ 	/*
+	=================
+	
+
+	if(IsType( rvProjectileRocket::GetClassType() ))
+	{
+	return falase;
+	}
+
+	
+	=================
+	*/
  	hitTeleporter = false;
 
 	if ( state == EXPLODED || state == FIZZLED ) {

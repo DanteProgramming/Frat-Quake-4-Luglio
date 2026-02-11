@@ -447,7 +447,7 @@ stateResult_t rvWeaponRocketLauncher::State_Fire ( const stateParms_t& parms ) {
 		case STAGE_INIT:
 			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));		
 			Attack ( false, 1, spread, 0, 1.0f );
-			PlayAnim ( ANIMCHANNEL_LEGS, "fire", parms.blendFrames );	
+			PlayAnim ( ANIMCHANNEL_LEGS, "fire", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
 	
 		case STAGE_WAIT:			
@@ -499,10 +499,11 @@ stateResult_t rvWeaponRocketLauncher::State_Rocket_Idle ( const stateParms_t& pa
 						}
 					}
 				} else {
-					if ( AmmoInClip ( ) == 0 ) {
+					if (AmmoInClip() == 0) {
 						SetRocketState ( "Rocket_Reload", 0 );
 						return SRESULT_DONE;
-					}				
+					}	
+					
 				}
 			}
 			return SRESULT_WAIT;
