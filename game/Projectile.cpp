@@ -635,7 +635,19 @@ bool idProjectile::Collide( const trace_t &collision, const idVec3 &velocity, bo
  	bool		canDamage;
  	
  	hitTeleporter = false;
+	if (owner->IsType(idPlayer::GetClassType()))
+	{
+		//add a rocket launcher pointer to check
+		if (bounceCount == -1)
+		{
+			return true;
+			state = EXPLODED;
+		}
+		else {
+			return false;
+		}
 
+	}
 	if ( state == EXPLODED || state == FIZZLED ) {
 		return true;
 	}
@@ -1150,6 +1162,13 @@ void idProjectile::Explode( const trace_t *collision, const bool showExplodeFX, 
 	endpos = ( collision ) ? collision->endpos : GetPhysics()->GetOrigin();
 
 	removeTime = spawnArgs.GetInt( "remove_time", "1500" );
+
+	if (bounceCount == -1)
+	{
+		
+		state = EXPLODED;
+		return;
+	}
 
 	// play sound
 	StopSound( SND_CHANNEL_BODY, false );
