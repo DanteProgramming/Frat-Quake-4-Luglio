@@ -422,10 +422,10 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 				fireHeldTime = 0;
 				SetState ( "Idle", 4 );
 				return SRESULT_DONE;
-			}
+			}	
 
 
-	
+
 			if ( gameLocal.time - fireHeldTime > chargeTime ) {	
 				Attack ( true, 10, 10, 10, .02f );
 				PlayEffect ( "fx_chargedflash", barrelJointView, false );

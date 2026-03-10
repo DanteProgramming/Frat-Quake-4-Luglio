@@ -544,7 +544,7 @@ private:
 	int						mpGUIState;							// local cache to avoid systematic SetStateInt
 // RAVEN BEGIN
 // abahr: changed to protected for access in children classes
-protected:
+public:
 // ddynerman: multiple game instances
 	int						instance;
 // ddynerman: multiple collision worlds
@@ -673,7 +673,8 @@ protected:
 	void					Event_AppendTarget				( idEntity *appendMe );
 	void					Event_RemoveTarget				( idEntity *removeMe );
 // mekberg: added
-	void					Event_SetHealth					( float newHealth );
+	void					Event_SetHealth	
+				( float newHealth );
 // RAVEN END
 };
 

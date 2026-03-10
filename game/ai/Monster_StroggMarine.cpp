@@ -393,6 +393,9 @@ bool rvMonsterStroggMarine::CheckActions ( void ) {
 
 	if ( idAI::CheckActions ( ) ) 
 	{
+		gameLocal.Printf("Works!");
+		gameLocal.GetLocalPlayer()->hud->HandleNamedEvent("showBossShieldWarn");
+
 		return true;
 	}
 	if ( PerformAction ( &actionCrouchRangedAttack,  (checkAction_t)&rvMonsterStroggMarine::CheckAction_CrouchRangedAttack, &actionTimerRangedAttack ) ||
@@ -401,7 +404,8 @@ bool rvMonsterStroggMarine::CheckActions ( void ) {
 		PerformAction ( &actionStrafe,  (checkAction_t)&rvMonsterStroggMarine::CheckAction_Strafe ) ||
 		PerformAction ( &actionAngry,  (checkAction_t)&rvMonsterStroggMarine::CheckAction_Angry ) ||
 		PerformAction ( &actionReload,  (checkAction_t)&rvMonsterStroggMarine::CheckAction_Reload ) ) {
-		return true;
+		//gameLocal.Printf("Works2!");
+		return false;
 	}
 	return false;
 }

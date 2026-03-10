@@ -2468,6 +2468,7 @@ idAI::Attack
 bool idAI::Attack ( const char* attackName, jointHandle_t joint, idEntity* target, const idVec3& pushVelocity ) {
 	// Get the attack dictionary
 	const idDict* attackDict;
+	idEntity* healthy;
 	attackDict = gameLocal.FindEntityDefDict ( spawnArgs.GetString ( va("def_attack_%s", attackName ) ), false );
 	if ( !attackDict ) {
 		gameLocal.Error ( "could not find attack entityDef 'def_attack_%s (%s)' on AI entity %s", attackName, spawnArgs.GetString ( va("def_attack_%s", attackName ) ), GetName ( ) );
@@ -2475,11 +2476,13 @@ bool idAI::Attack ( const char* attackName, jointHandle_t joint, idEntity* targe
 
 	// Melee Attack?
 	if ( spawnArgs.GetBool ( va("attack_%s_melee", attackName ), "0" ) ) {
+		
 		return AttackMelee ( attackName, attackDict );
+		
 	}
 
 	// Ranged attack (hitscan or projectile)?
-	return ( AttackRanged ( attackName, attackDict, joint, target, pushVelocity ) != NULL );
+	return false;
 }
 
 /*
@@ -2711,7 +2714,6 @@ void idAI::DirectDamage( const char *meleeDefName, idEntity *ent ) {
 
 //	ent->Damage( this, this, globalKickDir, meleeDefName, 1.0f, INVALID_JOINT );
 	float	damageScale = spawnArgs.GetFloat( "damageScale", "1" );
-	ent->Damage( this, this, globalKickDir, meleeDefName, damageScale, NULL );
 }
 
 /*
@@ -2780,6 +2782,8 @@ bool idAI::AttackMelee ( const char *attackName, const idDict* meleeDict ) {
 	idEntity*				enemyEnt = enemy.ent;
 	const char*				p;
 	const idSoundShader*	shader;
+	idEntity* self;
+
 
 	if ( !enemyEnt ) {
 		p = meleeDict->GetString( "snd_miss" );
@@ -2799,6 +2803,7 @@ bool idAI::AttackMelee ( const char *attackName, const idDict* meleeDict ) {
 		player->CalcDamagePoints( this, this, meleeDict, 1.0f, INVALID_JOINT, &damage, &armor );
 
 		if ( enemyEnt->health <= damage ) {
+			return false;
 			int	t = gameLocal.time - player->lastSavingThrowTime;
 			if ( t > SAVING_THROW_TIME ) {
 				player->lastSavingThrowTime = gameLocal.time;
@@ -2875,8 +2880,20 @@ bool idAI::AttackMelee ( const char *attackName, const idDict* meleeDict ) {
 	}
 
 	lastAttackTime = gameLocal.time;
-
+	BecomeInactive(TH_THINK);
+	int num = gameLocal.random.RandomInt() & 3;
+	if (num == 0) {
+		gameLocal.Printf("zero");
+	}
+	else if (num == 1) {
+		gameLocal.Printf("juan");
+	}
+	else if(num == 2){
+		gameLocal.Printf("achoo");
+	}
+	
 	return true;
+	
 }
 
 /*

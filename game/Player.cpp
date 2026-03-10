@@ -8755,10 +8755,20 @@ void idPlayer::AdjustSpeed( void ) {
 	speed *= PowerUpModifier(PMOD_SPEED);
 
 	if ( influenceActive == INFLUENCE_LEVEL3 ) {
-		speed *= 0.33f;
+		//speed *= 0.33f;
 	}
 
 	physicsObj.SetSpeed( speed, pm_crouchspeed.GetFloat() );
+	
+	if (health <= 60 && health > 40) {
+		physicsObj.SetSpeed(speed*0.6f, pm_crouchspeed.GetFloat());
+	}
+	else if (health <= 40 && health > 20) {
+		physicsObj.SetSpeed(speed*0.5f, pm_crouchspeed.GetFloat());
+	}
+	else if (health <= 20) {
+		physicsObj.SetSpeed(speed * 0.4f, pm_crouchspeed.GetFloat());
+	}
 }
 
 /*
@@ -10261,9 +10271,32 @@ void idPlayer::Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &di
 		if ( damage < 1 ) {
 			damage = 1;
 		}
-
+		idCamera* cam;
+		idPlayerView* view;
 		int oldHealth = health;
-		health -= damage;
+		health -= 10;
+		//hud->HandleNamedEvent("showChats");
+		if (health <= 60 && health >40) {
+			hud->HandleNamedEvent("Buzzed");
+			SetFOV(100,100);
+			playerView.Flash(idVec4(0, 0, 0, 0), 1000);
+			AdjustSpeed();
+		}
+		else if (health <= 40 && health > 20) {
+			hud->HandleNamedEvent("Plastered");
+			hud->HandleNamedEvent("PlasteredScreen");
+			SetFOV(250, 250);
+			playerView.Flash(idVec4(0, 0, 0, 0), 10000);
+			AdjustSpeed();
+
+		}
+		else if (health <= 20) {
+			hud->HandleNamedEvent("Wasted");
+			hud->HandleNamedEvent("WasteScreen");
+			SetFOV(1000, 1000);
+			playerView.Flash(idVec4(0, 0, 0, 0), 100000);
+			AdjustSpeed();
+		}
 
 		GAMELOG_ADD ( va("player%d_damage_taken", entityNumber ), damage );
 		GAMELOG_ADD ( va("player%d_damage_%s", entityNumber, damageDefName), damage );
